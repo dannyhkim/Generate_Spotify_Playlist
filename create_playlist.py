@@ -13,8 +13,7 @@ from secrets import spotify_token, spotify_user_id
 class CreatePlaylist:
     
     def __init__(self):
-        self.user_id = spotify_user_id
-        self.spotify_token = spotify_token
+        self.all_song_info = {}
         self.youtube_client = self.get_youtube_client()
     
     # Log into YouTube
@@ -81,7 +80,7 @@ class CreatePlaylist:
             "public": True
         })
         
-        query = "https://api.spotify.com/v1/users/{user_id}/playlists".format(spotify_user_id)
+        query = "https://api.spotify.com/v1/users/{}/playlists".format(spotify_user_id)
         response = requests.post(
             query,
             data=request_body,
@@ -105,7 +104,7 @@ class CreatePlaylist:
             query,
             headers={
                 "Content-Type":"application/json",
-                "Authorization": "Bearer {}".format(spotify_token)
+                "Authorization": "Bearer {}".format(self.spotify_token)
             }
         )
         response_json = response.json()
@@ -140,7 +139,7 @@ class CreatePlaylist:
             data=request_data, 
             headers={
                 "Content-Type":"application/json",
-                "Authorization": "Bearer {}".format(spotify_token)
+                "Authorization": "Bearer {}".format(self.spotify_token)
             }
         )
         
@@ -150,8 +149,9 @@ class CreatePlaylist:
         
         response_json = response.json()
         return response_json
-    
-    if __name__ == '__main__':
-        cp = CreatePlaylist()
-        cp.add_song_to_playlist()
+
+
+if __name__ == '__main__':
+    cp = CreatePlaylist()
+    cp.add_song_to_playlist()
         
