@@ -13,10 +13,13 @@ from secrets import spotify_token, spotify_user_id
 class CreatePlaylist:
     
     def __init__(self):
-        pass
+        self.user_id = spotify_user_id
+        self.spotify_token = spotify_token
+        self.youtube_client = self.get_youtube_client()
     
+    # Log into YouTube
     def get_youtube_client(self):
-        pass
+        
     
     def get_liked_videos(self):
         # Retrieve Liked Videos and create a dictionary of important song info
