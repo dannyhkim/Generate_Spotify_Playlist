@@ -19,20 +19,60 @@ class CreatePlaylist:
     
     # Log into YouTube
     def get_youtube_client(self):
-        
+        # YouTube Data API
+        # Disable OAuthlib's HTTPS verification when running locally.
+        # *DO NOT* leave this option enabled in production.
+        os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+
+        api_service_name = "youtube"
+        api_version = "v3"
+        client_secrets_file = "client_secret.json"
+
+        # Get credentials and create an API client
+        scopes = ["https://www.googleapis.com/auth/youtube.readonly"]
+        flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+            client_secrets_file, scopes)
+        credentials = flow.run_console()
+
+        # from the Youtube DATA API
+        youtube_client = googleapiclient.discovery.build(
+            api_service_name, api_version, credentials=credentials)
+
+        return youtube_client
     
     def get_liked_videos(self):
         # Retrieve Liked Videos and create a dictionary of important song info
         
-        request = self.youtube_client.videos.list(
+        request = self.youtube_client.videos().list(
             part="snippet,contentDetails,statistics",
             myRating="like"
         )
         response = request.execute()
         
+        # collect each video and get info
+        for item in response["items"]:
+            video_title = item["snippet"]["title"]
+            youtube_url = "https://www.youtube.com/watch?v={}".format(
+                item["id"])
+            
+            # use youtube dl to collect the song name and artist name
+            video = youtube_dl.YoutubeDL({}).extract_info(
+                youtube_url, download=False)
+            song_name = video["track"]
+            artist = video["artist"]
+            
+            if song_name is not None and artist is not None:
+                # save all important info and skip any missing song and artist 
+                self.all_song_info[video_title] = {
+                    "youtube_url": youtube_url,
+                    "song_name": song_name,
+                    "artist": artist,
+                    
+                    # add uri
+                    "spotify_uri": self.get_spotify_uri(song_name, artist)
+                }
         
-    
-    
+        
     def create_playlist(self):
         
         request_body = json.dumps({
