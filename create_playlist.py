@@ -1,5 +1,6 @@
 import json
 import os
+import certifi
 
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
@@ -68,10 +69,9 @@ class CreatePlaylist:
 
                     # add the uri, easy to get song to put into playlist
                     "spotify_uri": self.get_spotify_uri(song_name, artist)
-
                 }
 
-    def create_playlist(self):
+    def create_playlist(self): # works 
         """Create A New Playlist"""
         request_body = json.dumps({
             "name": "Youtube Liked Vids",
@@ -121,18 +121,24 @@ class CreatePlaylist:
         self.get_liked_videos()
 
         # collect all of uri
-        uris = [info["spotify_uri"]
-                for song, info in self.all_song_info.items()]
-
+        uris = []
+        for song, info in self.all_song_info.items():
+            uris.append(info["spotify_uri"])
+            
+        
+        print("uris is", uris)
+        print("all_song_info is", self.all_song_info)
         # create a new playlist
         playlist_id = self.create_playlist()
 
         # add all songs into new playlist
-        request_data = json.dumps(uris)
+        request_data = json.dumps(uris) # takes in a json object and returns string 
 
         query = "https://api.spotify.com/v1/playlists/{}/tracks".format(
             playlist_id)
 
+        print(request_data)
+        
         response = requests.post(
             query,
             data=request_data,
@@ -141,7 +147,7 @@ class CreatePlaylist:
                 "Authorization": "Bearer {}".format(spotify_token) # post request currently not working 
             }
         )
-
+        print("Response is", response)
         # check for valid response status
         if response.status_code != 200:
             raise ResponseException(response.status_code)
