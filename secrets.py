@@ -1,3 +1,3 @@
 # Spotify client secret info
-spotify_token = "BQAIPjWQ_4X0e30jq3ctMRPZmyL5WJHTu0uvZUD5BSZZwR2xRdk5u536BFWCM5E0VMEOwLjLZxGSQbMLQNzb3pJxXcLrlAnqK5mETS3f3DAY_1g_YtYDYwaf4J2ML_1rqIpQzTcmq6mJKyprrIbCEMt9_pb6U4vJe_WBxQyRnoo_"
-spotify_user_id = "d_kim200"
+spotify_token = ""
+spotify_user_id = ""
