@@ -1,6 +1,6 @@
 # Spotify client secret info
-spotify_token = "BQCo-exuCnpV6J8gXoJ0eTVvkXz8WaIlFgoMGjrAu3hUHPXJgB7x3o_V_ar8MNSZimGNu0Tg_y7um5doOJkTCeX1sE2W0Ti-YEkjK8OYnJtWiehgvyHf87p5C8OzyFs0UfVxreEz5SeWatqC595jWSao0CHNqhp0K-56PpR5hig6"
-spotify_user_id = "d_kim200"
+spotify_token = ""
+spotify_user_id = ""
 
 {
     'collaborative': False, 
